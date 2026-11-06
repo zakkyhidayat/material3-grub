@@ -54,7 +54,7 @@ The installer copies the theme to `/boot/grub2/themes/material3`, sets `GRUB_TER
 ## Rebuild the theme
 
 ```bash
-python3 tools/grub/make_theme.py          # writes tools/grub/material3/
+python3 tools/grub/make_theme.py          # asks for the device name, then writes tools/grub/material3/
 sudo cp -r tools/grub/material3 /boot/grub2/themes/material3
 ```
 
@@ -71,5 +71,5 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 ## Notes
 
-- The subtitle "ThinkPad X13 Gen 2i" is set in `make_theme.py`. Change it for other hardware.
+- The device name under "Choose a system" is asked for when `make_theme.py` runs in a terminal (Enter keeps "ThinkPad X13 Gen 2i"). Set `GRUB_THEME_DEVICE` to skip the prompt, for example `GRUB_THEME_DEVICE="My Laptop" python3 tools/grub/make_theme.py`.
 - The Fedora icon is Fedora's logo, a trademark of its owner, used only as a menu icon.

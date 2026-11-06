@@ -3,6 +3,8 @@
 
   python3 tools/grub/make_theme.py [OUTDIR]        (default tools/grub/material3)
 
+Asks for the device name shown under "Choose a system" when run in a terminal; GRUB_THEME_DEVICE sets it without asking.
+
 Static text (title, subtitle, key hints) is drawn into the background with Google Sans Flex Regular; only the menu
 labels and the countdown use GRUB's own .pf2 fonts (made with grub2-mkfont). Needs Pillow, grub2-mkfont, Google Sans Flex Regular.
 """
@@ -13,6 +15,21 @@ W, H = 1920, 1200
 SS = 4  # supersampling for smooth edges
 FONT = os.environ.get("GRUB_THEME_FONT", "/usr/share/fonts/google-sans-flex/GoogleSansFlex-Regular.ttf")
 ARROW_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"  # Google Sans Flex has no arrow glyphs; used for the ↑ ↓ hint only
+DEVICE_DEFAULT = "ThinkPad X13 Gen 2i"
+DEVICE = DEVICE_DEFAULT  # subtitle under "Choose a system"; set by device_name()
+
+
+def device_name():
+    """GRUB_THEME_DEVICE if set; otherwise ask on a terminal (Enter keeps the default); otherwise the default."""
+    env = os.environ.get("GRUB_THEME_DEVICE", "").strip()
+    if env:
+        return env
+    if sys.stdin.isatty():
+        answer = input("Device name shown under 'Choose a system' [%s]: " % DEVICE_DEFAULT).strip()
+        return answer or DEVICE_DEFAULT
+    return DEVICE_DEFAULT
+
+
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "material3")
 
 # Material 3 dark scheme from a blue seed
@@ -71,7 +88,7 @@ def background():
     im = im.resize((W, H), Image.LANCZOS)
     d = ImageDraw.Draw(im)
     d.text((CX + PAD, CY + 58), "Choose a system", font=font(46), fill=rgba(C["on_surface"]))
-    d.text((CX + PAD, CY + 124), "ThinkPad X13 Gen 2i", font=font(21), fill=rgba(C["on_surface_variant"]))
+    d.text((CX + PAD, CY + 124), DEVICE, font=font(21), fill=rgba(C["on_surface_variant"]))
     d.line([(CX + PAD, FOOT_Y - 20), (CX + CARD_W - PAD, FOOT_Y - 20)], fill=rgba(C["container_high"]), width=2)
     hints = [("↑ ↓", "choose"), ("Enter", "start"), ("e", "edit")]
     x = CX + CARD_W - PAD
@@ -154,6 +171,8 @@ def mkfont(size, out):
 
 
 def main():
+    global DEVICE
+    DEVICE = device_name()
     os.makedirs(os.path.join(OUT, "icons"), exist_ok=True)
     background().save(os.path.join(OUT, "background.png"), optimize=True)
     for k, p in row_slices(C["secondary_container"]).items():
@@ -165,7 +184,7 @@ def main():
         icon(kind).save(os.path.join(OUT, "icons", name + ".png"))
     item_font = mkfont(26, os.path.join(OUT, "item_26.pf2"))
     small_font = mkfont(18, os.path.join(OUT, "small_18.pf2"))
-    theme = f"""# material3: Material 3 GRUB theme for the ThinkPad X13 Gen 2i (1920x1200). Made by tools/grub/make_theme.py.
+    theme = f"""# material3: Material 3 GRUB theme for {DEVICE} (1920x1200). Made by tools/grub/make_theme.py.
 title-text: ""
 desktop-image: "background.png"
 desktop-color: "{C['surface']}"

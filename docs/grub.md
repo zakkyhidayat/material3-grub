@@ -19,7 +19,7 @@ Made by `tools/grub/make_theme.py` (Pillow + `grub2-mkfont`) for a 1920x1200 pan
 GRUB draws a row's pixmap box *around* the row, padded by the corner images' size, so `item_height` is the visible row minus
 twice the corner radius, every row gets a transparent box of the same size, and `item_spacing` makes up the rest.
 
-The subtitle text ("ThinkPad X13 Gen 2i") is hard-coded in `make_theme.py`; change it there for other hardware.
+The device name under "Choose a system" is asked for when `make_theme.py` runs in a terminal (default "ThinkPad X13 Gen 2i"). `GRUB_THEME_DEVICE` sets it without asking.
 
 ## `tools/grub/install_grub.sh`
 Dry run by default; `--run` asks before each step (`y` continues, anything else stops).
