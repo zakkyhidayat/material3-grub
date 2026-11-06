@@ -11,9 +11,21 @@ The theme is dark, uses a blue seed colour, and has M3 Expressive shapes in the 
 - `tools/grub/material3/`: the built theme (`theme.txt`, background, icons, menu fonts)
 - `tools/grub/make_theme.py`: regenerates the theme from the colours and layout constants at the top of the file
 - `tools/grub/install_grub.sh`: installs the theme and enables the graphical menu (dry run by default)
-- `tools/grub/logos/`: source SVGs for the menu icons
+- `tools/grub/logos/`: source SVGs for the Fedora icon
 - `docs/img/grub.png`: screenshot
 - `docs/grub.md`: design notes, installer steps, and how to undo them
+
+## Icons
+
+Each menu entry shows the icon for its `--class` names. GRUB tries the classes in order and uses the first matching file in `material3/icons/`:
+
+| File | Used for |
+|---|---|
+| `fedora.png` | entries with `--class fedora` (Fedora's own entries) |
+| `efi.png` | the UEFI firmware settings entry (`--class efi`) |
+| `os.png` | fallback: a neutral disc. `grub-mkconfig` gives every generated entry `--class os`, so any OS without its own icon gets this one |
+
+To add an icon for another OS, add `material3/icons/<class>.png` at 48x48 and copy the theme (see below). Check the class name in your generated `grub.cfg`. A file named after a class that is only in your own `menuentry` also works.
 
 ## Requirements
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the "material3" GRUB theme (icons from logos/: Fedora as is, a drawn settings gear): Material 3 (dark, blue scheme) with M3 Expressive shapes, for a 1920x1200 panel.
+"""Generate the "material3" GRUB theme (icons from logos/: Fedora as is, a drawn settings gear, and a neutral fallback disc, os.png, for entries without an icon of their own): Material 3 (dark, blue scheme) with M3 Expressive shapes, for a 1920x1200 panel.
 
   python3 tools/grub/make_theme.py [OUTDIR]        (default tools/grub/material3)
 
@@ -120,7 +120,14 @@ def icon(kind):
         return svg("fedora", s).resize((ICON, ICON), Image.LANCZOS)
     im = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    d.ellipse([(0, 0), (s - 1, s - 1)], fill=rgba(C["primary"]))  # settings gear
+    if kind == "default":  # fallback (icons/os.png): neutral disc, outlined ring, centre dot
+        d.ellipse([(0, 0), (s - 1, s - 1)], fill=rgba(C["container_high"]))
+        inset, lw = int(3 * SS), int(3 * SS)
+        d.ellipse([(inset, inset), (s - 1 - inset, s - 1 - inset)], outline=rgba(C["outline"]), width=lw)
+        r = int(5 * SS)
+        d.ellipse([(s / 2 - r, s / 2 - r), (s / 2 + r, s / 2 + r)], fill=rgba(C["outline"]))
+        return im.resize((ICON, ICON), Image.LANCZOS)
+    d.ellipse([(0, 0), (s - 1, s - 1)], fill=rgba(C["primary"]))  # settings gear (efi)
     g, lw = rgba(C["on_primary"]), int(2.6 * SS)
     u = s / 48
     cx = cy = 24 * u
@@ -156,7 +163,8 @@ def main():
         p.save(os.path.join(OUT, "select_%s.png" % k))
     for k, p in row_slices(None).items():
         p.save(os.path.join(OUT, "item_%s.png" % k))
-    for name, kind in (("fedora", "fedora"), ("efi", "efi")):
+    # "os" is the class grub-mkconfig gives every generated entry, so it is the fallback when an OS has no icon of its own
+    for name, kind in (("fedora", "fedora"), ("efi", "efi"), ("os", "default")):
         icon(kind).save(os.path.join(OUT, "icons", name + ".png"))
     item_font = mkfont(26, os.path.join(OUT, "item_26.pf2"))
     small_font = mkfont(18, os.path.join(OUT, "small_18.pf2"))

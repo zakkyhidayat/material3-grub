@@ -12,7 +12,8 @@ Made by `tools/grub/make_theme.py` (Pillow + `grub2-mkfont`) for a 1920x1200 pan
   countdown (18 px) use GRUB fonts made from the same font (Latin and arrows only, to keep them small).
 - Icons by GRUB class: `fedora` (the Fedora logo as it is, from `tools/grub/logos/fedora.svg`, from
   [Fedora icon (2021)](https://commons.wikimedia.org/wiki/File:Fedora_icon_(2021).svg), a trademark of its owner, used here
-  only as a menu icon) and `efi`: a drawn settings gear.
+  only as a menu icon), `efi`: a drawn settings gear, and `os`: a neutral disc used as the fallback for any entry with
+  no icon of its own (GRUB tries an entry's `--class` names in order; `grub-mkconfig` adds `--class os`).
 
 GRUB draws a row's pixmap box *around* the row, padded by the corner images' size, so `item_height` is the visible row minus
 twice the corner radius, every row gets a transparent box of the same size, and `item_spacing` makes up the rest.
