@@ -2,7 +2,9 @@
 
 A Material 3 theme for GRUB, with a generator script and an installer.
 
-![The material3 GRUB theme, rendered by GRUB 2.12 in QEMU](docs/img/grub.png)
+![The material3 GRUB theme, rendered by GRUB 2.12 in QEMU](docs/img/material3.png)
+
+![Earlier build with the Googlebook entry](docs/img/grub.png)
 
 The theme is dark, uses a blue seed colour, and has M3 Expressive shapes in the background. It is built for a 1920x1200 panel.
 
@@ -12,7 +14,8 @@ The theme is dark, uses a blue seed colour, and has M3 Expressive shapes in the 
 - `tools/grub/make_theme.py`: regenerates the theme from the colours and layout constants at the top of the file
 - `tools/grub/install_grub.sh`: installs the theme and enables the graphical menu (dry run by default)
 - `tools/grub/logos/`: source SVGs for the Fedora icon
-- `docs/img/grub.png`: screenshot
+- `docs/img/material3.png`: current render
+- `docs/img/grub.png`: earlier screenshot (Googlebook entry)
 - `docs/grub.md`: design notes, installer steps, and how to undo them
 
 ## Icons
