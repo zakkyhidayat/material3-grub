@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate the "googlebook-m3" GRUB theme (icons from logos/: Fedora as is, Google's G white on Google blue): Material 3 (dark, blue scheme) with M3 Expressive shapes, for a 1920x1200 panel.
+"""Generate the "material3" GRUB theme (icons from logos/: Fedora as is, a drawn settings gear): Material 3 (dark, blue scheme) with M3 Expressive shapes, for a 1920x1200 panel.
 
-  python3 tools/grub/make_theme.py [OUTDIR]        (default tools/grub/googlebook-m3)
+  python3 tools/grub/make_theme.py [OUTDIR]        (default tools/grub/material3)
 
 Static text (title, subtitle, key hints) is drawn into the background with Adwaita Sans at real weights; only the menu
 labels and the countdown use GRUB's own .pf2 fonts (made with grub2-mkfont). Needs Pillow, grub2-mkfont, Adwaita Sans.
@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 W, H = 1920, 1200
 SS = 4  # supersampling for smooth edges
 FONT = "/usr/share/fonts/adwaita-sans-fonts/AdwaitaSans-Regular.ttf"
-OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "googlebook-m3")
+OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "material3")
 
 # Material 3 dark scheme from a blue seed
 C = dict(surface="#111318", container="#1D2024", container_high="#272A2F", primary="#AAC7FF", on_primary="#0A305F",
@@ -104,7 +104,6 @@ def row_slices(color, r=SEL_R, w=400, h=ROW_H):
 
 
 LOGOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logos")
-GOOGLE_BLUE = "#1A73E8"
 
 
 def svg(name, size):
@@ -121,14 +120,6 @@ def icon(kind):
         return svg("fedora", s).resize((ICON, ICON), Image.LANCZOS)
     im = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    if kind == "googlebook":  # Google's "G" in solid white on a Google-blue circle
-        d.ellipse([(0, 0), (s - 1, s - 1)], fill=rgba(GOOGLE_BLUE))
-        g = svg("google_g", s)
-        g = g.crop(g.getbbox())
-        k = int(s * 0.52) / max(g.size)
-        g = g.resize((round(g.width * k), round(g.height * k)), Image.LANCZOS)
-        im.paste(Image.new("RGBA", g.size, (255, 255, 255, 255)), ((s - g.width) // 2, (s - g.height) // 2), g.split()[3])
-        return im.resize((ICON, ICON), Image.LANCZOS)
     d.ellipse([(0, 0), (s - 1, s - 1)], fill=rgba(C["primary"]))  # settings gear
     g, lw = rgba(C["on_primary"]), int(2.6 * SS)
     u = s / 48
@@ -165,11 +156,11 @@ def main():
         p.save(os.path.join(OUT, "select_%s.png" % k))
     for k, p in row_slices(None).items():
         p.save(os.path.join(OUT, "item_%s.png" % k))
-    for name, kind in (("googlebook", "googlebook"), ("fedora", "fedora"), ("efi", "efi")):
+    for name, kind in (("fedora", "fedora"), ("efi", "efi")):
         icon(kind).save(os.path.join(OUT, "icons", name + ".png"))
     item_font = mkfont(26, os.path.join(OUT, "item_26.pf2"))
     small_font = mkfont(18, os.path.join(OUT, "small_18.pf2"))
-    theme = f"""# googlebook-m3: Material 3 GRUB theme for the ThinkPad X13 Gen 2i (1920x1200). Made by tools/grub/make_theme.py.
+    theme = f"""# material3: Material 3 GRUB theme for the ThinkPad X13 Gen 2i (1920x1200). Made by tools/grub/make_theme.py.
 title-text: ""
 desktop-image: "background.png"
 desktop-color: "{C['surface']}"

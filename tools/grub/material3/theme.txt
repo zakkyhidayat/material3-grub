@@ -1,4 +1,4 @@
-# googlebook-m3: Material 3 GRUB theme for the ThinkPad X13 Gen 2i (1920x1200). Made by tools/grub/make_theme.py.
+# material3: Material 3 GRUB theme for the ThinkPad X13 Gen 2i (1920x1200). Made by tools/grub/make_theme.py.
 title-text: ""
 desktop-image: "background.png"
 desktop-color: "#111318"
