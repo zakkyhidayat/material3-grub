@@ -8,8 +8,9 @@ Made by `tools/grub/make_theme.py` (Pillow + `grub2-mkfont`) for a 1920x1200 pan
 - Material 3 dark scheme from a blue seed: surface `#111318`, a `surface-container` card with 40 px corners, the selected row
   as a `secondary-container` pill, icons on `primary` circles.
 - M3 Expressive shapes in the background: a 12-lobe "cookie" (primary container) and an 8-lobe "flower" (tertiary container).
-- Adwaita Sans: the title, subtitle and key hints are drawn into the background at real weights; menu labels (26 px) and the
-  countdown (18 px) use GRUB fonts made from the same font (Latin and arrows only, to keep them small).
+- Google Sans Flex Regular (SIL OFL): the title, subtitle and key hints are drawn into the background; menu labels (26 px) and the
+  countdown (18 px) use GRUB fonts made from the same font (Latin and arrows only, to keep them small). Google Sans Flex has no
+  arrow glyphs, so the ↑ ↓ hint is drawn in DejaVu Sans.
 - Icons by GRUB class: `fedora` (the Fedora logo as it is, from `tools/grub/logos/fedora.svg`, from
   [Fedora icon (2021)](https://commons.wikimedia.org/wiki/File:Fedora_icon_(2021).svg), a trademark of its owner, used here
   only as a menu icon), `efi`: a drawn settings gear, and `os`: a neutral disc used as the fallback for any entry with

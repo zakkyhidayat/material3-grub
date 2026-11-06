@@ -2,7 +2,7 @@
 title-text: ""
 desktop-image: "background.png"
 desktop-color: "#111318"
-terminal-font: "Adwaita Sans Regular 18"
+terminal-font: "Google Sans Flex Regular 18"
 terminal-left: "0"
 terminal-top: "0"
 terminal-width: "100%"
@@ -14,9 +14,9 @@ terminal-border: "0"
   top = 486
   width = 796
   height = 296
-  item_font = "Adwaita Sans Regular 26"
+  item_font = "Google Sans Flex Regular 26"
   item_color = "#E2E2E9"
-  selected_item_font = "Adwaita Sans Regular 26"
+  selected_item_font = "Google Sans Flex Regular 26"
   selected_item_color = "#DAE2F9"
   item_height = 32
   item_padding = 4
@@ -36,7 +36,7 @@ terminal-border: "0"
   width = 360
   height = 28
   align = "left"
-  font = "Adwaita Sans Regular 18"
+  font = "Google Sans Flex Regular 18"
   color = "#C4C6D0"
   text = "Starting in %d s"
 }

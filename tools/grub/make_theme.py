@@ -3,15 +3,16 @@
 
   python3 tools/grub/make_theme.py [OUTDIR]        (default tools/grub/material3)
 
-Static text (title, subtitle, key hints) is drawn into the background with Adwaita Sans at real weights; only the menu
-labels and the countdown use GRUB's own .pf2 fonts (made with grub2-mkfont). Needs Pillow, grub2-mkfont, Adwaita Sans.
+Static text (title, subtitle, key hints) is drawn into the background with Google Sans Flex Regular; only the menu
+labels and the countdown use GRUB's own .pf2 fonts (made with grub2-mkfont). Needs Pillow, grub2-mkfont, Google Sans Flex Regular.
 """
 import math, os, struct, subprocess, sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H = 1920, 1200
 SS = 4  # supersampling for smooth edges
-FONT = "/usr/share/fonts/adwaita-sans-fonts/AdwaitaSans-Regular.ttf"
+FONT = os.environ.get("GRUB_THEME_FONT", "/usr/share/fonts/google-sans-flex/GoogleSansFlex-Regular.ttf")
+ARROW_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"  # Google Sans Flex has no arrow glyphs; used for the ↑ ↓ hint only
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "material3")
 
 # Material 3 dark scheme from a blue seed
@@ -38,13 +39,8 @@ def rgba(hexc, a=255):
     return tuple(int(hexc[i:i + 2], 16) for i in (0, 2, 4)) + (a,)
 
 
-def font(size, weight):
-    f = ImageFont.truetype(FONT, size)
-    try:
-        f.set_variation_by_axes([weight])
-    except Exception:
-        pass
-    return f
+def font(size):
+    return ImageFont.truetype(FONT, size)  # Google Sans Flex Regular (static file)
 
 
 def shape(n, amp, r, cx, cy, rot=0.0, steps=720):
@@ -74,13 +70,14 @@ def background():
     d.rounded_rectangle([(CX * SS, CY * SS), ((CX + CARD_W) * SS, (CY + CARD_H) * SS)], CARD_R * SS, fill=rgba(C["container"]))
     im = im.resize((W, H), Image.LANCZOS)
     d = ImageDraw.Draw(im)
-    d.text((CX + PAD, CY + 58), "Choose a system", font=font(46, 560), fill=rgba(C["on_surface"]))
-    d.text((CX + PAD, CY + 124), "ThinkPad X13 Gen 2i", font=font(21, 420), fill=rgba(C["on_surface_variant"]))
+    d.text((CX + PAD, CY + 58), "Choose a system", font=font(46), fill=rgba(C["on_surface"]))
+    d.text((CX + PAD, CY + 124), "ThinkPad X13 Gen 2i", font=font(21), fill=rgba(C["on_surface_variant"]))
     d.line([(CX + PAD, FOOT_Y - 20), (CX + CARD_W - PAD, FOOT_Y - 20)], fill=rgba(C["container_high"]), width=2)
     hints = [("↑ ↓", "choose"), ("Enter", "start"), ("e", "edit")]
     x = CX + CARD_W - PAD
-    f_key, f_txt = font(18, 600), font(18, 400)
+    f_txt = font(18)
     for key, txt in reversed(hints):  # right-aligned key chips
+        f_key = ImageFont.truetype(ARROW_FONT, 18) if any(ord(c) > 0x2000 for c in key) else font(18)
         tw = d.textlength(txt, font=f_txt)
         x -= tw
         d.text((x, FOOT_Y + 2), txt, font=f_txt, fill=rgba(C["on_surface_variant"]))

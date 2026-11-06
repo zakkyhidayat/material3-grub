@@ -31,7 +31,8 @@ To add an icon for another OS, add `material3/icons/<class>.png` at 48x48 and co
 
 - Pillow (`python3-pillow`)
 - `grub2-mkfont` and `rsvg-convert` (`librsvg2-tools`)
-- Adwaita Sans fonts at `/usr/share/fonts/adwaita-sans-fonts/`
+- Google Sans Flex Regular (`GoogleSansFlex-Regular.ttf`) at `/usr/share/fonts/google-sans-flex/`, or set `GRUB_THEME_FONT` to its path (SIL OFL)
+- DejaVu Sans (`fonts-dejavu-core`) for the ↑ ↓ arrows, which Google Sans Flex does not have
 - Fedora's `grub2-tools` (the installer uses `grub2-mkconfig` and `grub2-editenv`)
 
 ## Install
